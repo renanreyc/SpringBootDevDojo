@@ -20,8 +20,6 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class AnimeController {
-    private final DateUtil dateUtil;
-
     @Autowired
     private AnimeRepository animeRepository;
 
