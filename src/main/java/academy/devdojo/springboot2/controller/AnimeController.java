@@ -5,11 +5,13 @@ import java.util.Optional;
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.repository.AnimeRepository;
 
+import academy.devdojo.springboot2.service.AnimeService;
 import academy.devdojo.springboot2.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,15 +24,21 @@ import java.util.List;
 public class AnimeController {
     @Autowired
     private AnimeRepository animeRepository;
+    private AnimeService animeService;
 
     @GetMapping
     public List<Anime> getAnimes(){
         return animeRepository.findAll();
     }
     
-    @GetMapping("/{id}")
-    public Optional<Anime> getAnimeById(@PathVariable Long id) {
-        return animeRepository.findById(id);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Anime> getAnimeById(@PathVariable Long id) {
+        return ResponseEntity.ok(animeService.findByIdOrThrowBadRequestException(id));
+    }
+
+    @GetMapping(path = "/find")
+    public ResponseEntity<List<Anime>> findByName(@RequestParam String name) {
+        return ResponseEntity.ok(animeService.findByName(name));
     }
 
     @PostMapping
